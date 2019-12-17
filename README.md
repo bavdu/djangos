@@ -1,0 +1,2 @@
+# djangos
+study django web
