@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 
+app_name = 'polls'
 urlpatterns = [
     path('', views.response, name='response'),
     path('<str:questions_id>/', views.detail, name='detail'),

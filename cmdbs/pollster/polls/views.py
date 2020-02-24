@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, Http404
 from .models import Questions
 
 
@@ -7,11 +7,12 @@ from .models import Questions
 def response(request):
     # return HttpResponse('hello Django! params: {}'.format(style))
     questions = Questions.objects.order_by('create_date')
-    return HttpResponse(', '.join([question.question_text for question in questions]))
+    return render(request, 'polls/index.html', {'questions': questions})
 
 
 def detail(request, questions_id):
-    return HttpResponse('you are looking at question {}'.format(questions_id))
+    questions = get_object_or_404(Questions, pk=questions_id)
+    return render(request, 'polls/detail.html', {'questions': questions})
 
 
 def results(request, questions_id):
