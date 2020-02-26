@@ -224,7 +224,7 @@ class Servers(models.Model):
     )
 
     def __str__(self):
-        return '{0}-{1}-{2} <Serial:{3}>'.format(
+        return '{0}:{1}:{2} <Serial:{3}>'.format(
             self.Asset.Asset_Name, self.server_type,
             self.model_serial, self.Asset.Asset_Serial_Number
         )
@@ -352,7 +352,7 @@ class SecurityDevice(models.Model):
         (4, '运维审计系统'),
     )
 
-    Asset = models.OneToOneField('Assets', on_delete=models.CASCADE)
+    Asset = models.OneToOneField(Assets, on_delete=models.CASCADE)
 
     # 安全设备类型
     security_type = models.SmallIntegerField(
@@ -521,7 +521,7 @@ class Cpu(models.Model):
         cpu info
     """
 
-    Asset = models.OneToOneField('Assets', on_delete=models.CASCADE)
+    Asset = models.OneToOneField(Assets, on_delete=models.CASCADE)
 
     # cpu型号
     cpu_model = models.CharField(
@@ -554,7 +554,7 @@ class Memory(models.Model):
         memory info
     """
 
-    Asset = models.ForeignKey('Assets', on_delete=models.CASCADE)
+    Asset = models.ForeignKey(Assets, on_delete=models.CASCADE)
 
     # 设备号
     serial_number = models.CharField(
@@ -590,7 +590,7 @@ class Memory(models.Model):
     )
 
     def __str__(self):
-        return '{}-{}-{}-{}'.format(
+        return '<{}:{}:{}:{}>'.format(
             self.Asset.Asset_Name, self.model_number,
             self.slot, self.size
         )
@@ -613,7 +613,7 @@ class Disk(models.Model):
         ('unknown', 'unknown'),
     )
 
-    Asset = models.ForeignKey('Assets', on_delete=models.CASCADE)
+    Asset = models.ForeignKey(Assets, on_delete=models.CASCADE)
 
     # 磁盘序列号
     serial_number = models.CharField(
@@ -645,6 +645,7 @@ class Disk(models.Model):
     # 磁盘大小
     size = models.CharField(
         verbose_name='磁盘大小',
+        max_length=64,
         blank=True, null=True
     )
 
@@ -669,7 +670,7 @@ class Nic(models.Model):
         network info
     """
 
-    Asset = models.ForeignKey('Asset', on_delete=models.CASCADE)
+    Asset = models.ForeignKey(Assets, on_delete=models.CASCADE)
 
     # 网卡名称
     nic_name = models.CharField(
@@ -738,7 +739,7 @@ class Eventlog(models.Model):
         max_length=128
     )
 
-    Asset = models.ForeignKey('Asset', blank=True, null=True, on_delete=models.SET_NULL)
+    Asset = models.ForeignKey(Assets, blank=True, null=True, on_delete=models.SET_NULL)
     new_asset = models.ForeignKey('NewAssets', blank=True, null=True, on_delete=models.SET_NULL)
 
     event_type = models.SmallIntegerField(
